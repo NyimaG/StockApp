@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stockapp/register.dart';
 //import 'package:stockapp/stockcharts.dart';
 //import 'package:stockapp/stocksearch.dart';
+import 'pages/search_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -129,6 +130,15 @@ class _StockHomePageState extends State<StockHomePage> {
             ),
             child: TextField(
               controller: _searchController,
+              readOnly: true,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SearchPage(),
+                  ),
+                );
+              },
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
