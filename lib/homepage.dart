@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+//import 'package:stockapp/newsfeed.dart';
+import 'package:stockapp/register.dart';
+//import 'package:stockapp/stockcharts.dart';
+//import 'package:stockapp/stocksearch.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -24,17 +28,13 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const StockHomePage(
-        username: "",
-      ),
+      home: const StockHomePage(),
     );
   }
 }
 
 class StockHomePage extends StatefulWidget {
-  final String username;
-
-  const StockHomePage({super.key, required this.username});
+  const StockHomePage({super.key});
 
   @override
   State<StockHomePage> createState() => _StockHomePageState();
@@ -87,7 +87,7 @@ class _StockHomePageState extends State<StockHomePage> {
             ),
             const SizedBox(height: 4),
             Text(
-              'Welcome, ${widget.username}',
+              'Welcome, $globalUsername',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey[400],

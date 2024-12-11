@@ -11,7 +11,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
+  //final TextEditingController _usernameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   bool _isLoading = false;
@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
 
         // Navigate to Home Screen on success
         //Navigator.pushReplacementNamed(context, '/mboard.dart');
-        Navigator.push(
+        /*Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => MaterialApp(
@@ -55,12 +55,9 @@ class _LoginPageState extends State<LoginPage> {
               home: StockHomePage(username: _usernameController.text),
             ),
           ),
-        );
-        /*Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    StockHomePage(username: _usernameController.text)));*/
+        );*/
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => MyApp()));
       } catch (e) {
         // Show error message
         ScaffoldMessenger.of(context).showSnackBar(
@@ -118,26 +115,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(
                     height: 25,
-                  ),
-                  TextFormField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                            borderRadius: BorderRadius.circular(5.5)),
-                        prefixIcon: Icon(Icons.person_2, color: Colors.black),
-                        hintText: "Create Username",
-                        hintStyle: TextStyle(color: Colors.black),
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: 'Username'),
-                    keyboardType: TextInputType.name,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a username';
-                      }
-                      return null;
-                    },
                   ),
                   SizedBox(height: 10),
                   TextFormField(

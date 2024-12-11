@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 import 'login.dart';
 
+String globalUsername = '';
+
 /*void main() async {
   runApp(MyApp());
 }
@@ -39,7 +41,7 @@ class _RegisterState extends State<Register> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  //final TextEditingController _firstController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   //final TextEditingController _lastController = TextEditingController();
   bool isLoading = false;
 
@@ -55,6 +57,8 @@ class _RegisterState extends State<Register> {
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
+
+        globalUsername = _usernameController.text;
 
         // Navigate to home screen or show success message
         ScaffoldMessenger.of(context).showSnackBar(
@@ -131,6 +135,27 @@ class _RegisterState extends State<Register> {
                           value.isEmpty ||
                           !value.contains('@')) {
                         return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: _usernameController,
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                            borderRadius: BorderRadius.circular(5.5)),
+                        prefixIcon: Icon(Icons.person_2, color: Colors.black),
+                        hintText: "Create Username",
+                        hintStyle: TextStyle(color: Colors.black),
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'Username'),
+                    keyboardType: TextInputType.name,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a username';
                       }
                       return null;
                     },
