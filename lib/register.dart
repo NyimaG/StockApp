@@ -199,6 +199,9 @@ class _RegisterState extends State<Register> {
                             shadowColor: Colors.white,
                           ),
                         ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   ElevatedButton(
                     onPressed: () => Navigator.push(context,
                         MaterialPageRoute(builder: (context) => LoginPage())),

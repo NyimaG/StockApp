@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:stockapp/newsfeed.dart';
 //import 'package:stockapp/newsfeed.dart';
 import 'package:stockapp/register.dart';
+import 'package:stockapp/stockcharts.dart';
 //import 'package:stockapp/stockcharts.dart';
 //import 'package:stockapp/stocksearch.dart';
 import 'pages/search_page.dart';
@@ -42,6 +44,7 @@ class StockHomePage extends StatefulWidget {
 }
 
 class _StockHomePageState extends State<StockHomePage> {
+  int _selectedIndex = 0;
   final TextEditingController _searchController = TextEditingController();
   final List<Map<String, dynamic>> _favorites = [
     {
@@ -67,8 +70,64 @@ class _StockHomePageState extends State<StockHomePage> {
     },
   ];
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            IndexedStack(
+              index: _selectedIndex,
+              children: <Widget>[
+                _buildHomeContent(),
+                SearchPage(),
+                StockCharts(),
+                Newsfeed(),
+              ],
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: NavigationBar(
+        elevation: 10,
+        height: 60,
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: _onItemTapped,
+        destinations: [
+          NavigationDestination(
+            icon: Icon(Icons.home),
+            selectedIcon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.search),
+            selectedIcon: Icon(Icons.search_sharp),
+            label: 'Search',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.analytics),
+            selectedIcon: Icon(Icons.analytics_rounded),
+            label: 'Charts',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.newspaper),
+            selectedIcon: Icon(Icons.newspaper_sharp),
+            label: 'News',
+          ),
+        ],
+      ),
+    );
+  }
+
+  //@override
+  //Widget build(BuildContext context) {
+  Widget _buildHomeContent() {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
