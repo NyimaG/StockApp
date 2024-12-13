@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:stockapp/newsfeed.dart';
 //import 'package:stockapp/newsfeed.dart';
-import 'package:stockapp/register.dart';
 import 'package:stockapp/stockcharts.dart';
 //import 'package:stockapp/stockcharts.dart';
 //import 'package:stockapp/stocksearch.dart';
 import 'pages/search_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -45,6 +45,7 @@ class StockHomePage extends StatefulWidget {
 
 class _StockHomePageState extends State<StockHomePage> {
   int _selectedIndex = 0;
+  String? username;
   final TextEditingController _searchController = TextEditingController();
   final List<Map<String, dynamic>> _favorites = [
     {
@@ -73,6 +74,24 @@ class _StockHomePageState extends State<StockHomePage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUsername();
+  }
+
+  Future<String?> getUsername() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('username');
+  }
+
+  Future<void> _loadUsername() async {
+    String? savedUsername = await getUsername();
+    setState(() {
+      username = savedUsername;
     });
   }
 
@@ -147,7 +166,7 @@ class _StockHomePageState extends State<StockHomePage> {
             ),
             const SizedBox(height: 4),
             Text(
-              'Welcome, $globalUsername',
+              'Welcome, $username',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey[400],

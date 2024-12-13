@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 import 'login.dart';
-
-String globalUsername = '';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /*void main() async {
   runApp(MyApp());
@@ -39,10 +38,15 @@ class _RegisterState extends State<Register> {
     ));
   }
 
+  Future<void> saveUsername(String username) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('username', username);
+  }
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
-  //final TextEditingController _lastController = TextEditingController();
+
   bool isLoading = false;
 
   Future<void> _registerUser() async {
@@ -57,8 +61,9 @@ class _RegisterState extends State<Register> {
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
-
-        globalUsername = _usernameController.text;
+        String user = _usernameController.text;
+        saveUsername(user);
+        //_usernameController.text;
 
         // Navigate to home screen or show success message
         ScaffoldMessenger.of(context).showSnackBar(
