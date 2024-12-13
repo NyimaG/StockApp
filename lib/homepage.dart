@@ -6,6 +6,11 @@ import 'package:stockapp/stockcharts.dart';
 //import 'package:stockapp/stocksearch.dart';
 import 'pages/search_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:math';
+import 'dart:async';
+import 'services/finnhub_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -47,29 +52,9 @@ class _StockHomePageState extends State<StockHomePage> {
   int _selectedIndex = 0;
   String? username;
   final TextEditingController _searchController = TextEditingController();
-  final List<Map<String, dynamic>> _favorites = [
-    {
-      'symbol': 'test',
-      'name': 'test',
-      'price': '170.00',
-      'change': '+1.5%',
-      'color': const Color(0xFF1E88E5),
-    },
-    {
-      'symbol': 'Apple',
-      'name': 'Apple Inc.',
-      'price': '150',
-      'change': '-0.5%',
-      'color': const Color(0xFF43A047),
-    },
-    {
-      'symbol': 'Amazon',
-      'name': 'Amazon.com Inc.',
-      'price': '180',
-      'change': '+3.5%',
-      'color': const Color(0xFFE53935),
-    },
-  ];
+  List<Map<String, dynamic>> _favorites = [];
+  final FinnhubService _finnhubService = FinnhubService();
+  Timer? _priceUpdateTimer;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -81,6 +66,8 @@ class _StockHomePageState extends State<StockHomePage> {
   void initState() {
     super.initState();
     _loadUsername();
+    loadFavorites();
+    _startPriceUpdates();
   }
 
   Future<String?> getUsername() async {
@@ -95,6 +82,114 @@ class _StockHomePageState extends State<StockHomePage> {
     });
   }
 
+  void _addToFavorites(Map<String, dynamic> stock) async {
+    print('Adding stock: ${stock['symbol']} - ${stock['description']}');
+    if (!mounted) return;
+
+    try {
+      final priceData = await _finnhubService.getQuote(stock['symbol']);
+
+      setState(() {
+        if (!_favorites.any((item) => item['symbol'] == stock['symbol'])) {
+          _favorites.add({
+            'symbol': stock['symbol'],
+            'name': stock['description'],
+            'price': priceData['c'].toStringAsFixed(2),
+            'change':
+                '${(((priceData['c'] - priceData['pc']) / priceData['pc']) * 100).toStringAsFixed(2)}%',
+            'color': Color((Random().nextDouble() * 0xFFFFFF).toInt())
+                .withOpacity(1.0),
+          });
+        }
+      });
+    } catch (e) {
+      print('Error fetching stock price: $e');
+      setState(() {
+        if (!_favorites.any((item) => item['symbol'] == stock['symbol'])) {
+          _favorites.add({
+            'symbol': stock['symbol'],
+            'name': stock['description'],
+            'price': '0.00',
+            'change': '0.00%',
+            'color': Color((Random().nextDouble() * 0xFFFFFF).toInt())
+                .withOpacity(1.0),
+          });
+        }
+      });
+    }
+
+    if (_selectedIndex != 0) {
+      setState(() {
+        _selectedIndex = 0;
+      });
+    }
+
+    saveFavorites();
+  }
+
+  void _startPriceUpdates() {
+    _priceUpdateTimer = Timer.periodic(const Duration(seconds: 5), (_) {
+      _updatePrices();
+    });
+  }
+
+  Future<void> _updatePrices() async {
+    if (_favorites.isEmpty) return;
+
+    for (var stock in _favorites) {
+      {
+        final priceData = await _finnhubService.getQuote(stock['symbol']);
+        if (!mounted) return;
+
+        setState(() {
+          stock['price'] = priceData['c'].toStringAsFixed(2);
+          stock['change'] =
+              '${(((priceData['c'] - priceData['pc']) / priceData['pc']) * 100).toStringAsFixed(2)}%';
+        });
+      }
+    }
+  }
+
+  Future<void> saveFavorites() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'favorites': _favorites
+            .map((f) => {
+                  'symbol': f['symbol'],
+                  'name': f['name'],
+                  'color': f['color'].value,
+                })
+            .toList(),
+      });
+    }
+  }
+
+  Future<void> loadFavorites() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (doc.exists && doc.data()!.containsKey('favorites')) {
+        setState(() {
+          _favorites = List<Map<String, dynamic>>.from(
+            doc.data()!['favorites'].map((f) => {
+                  'symbol': f['symbol'],
+                  'name': f['name'],
+                  'price': '0.00',
+                  'change': '0.00%',
+                  'color': Color(f['color']),
+                }),
+          );
+        });
+        _updatePrices();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +200,11 @@ class _StockHomePageState extends State<StockHomePage> {
               index: _selectedIndex,
               children: <Widget>[
                 _buildHomeContent(),
-                SearchPage(),
+                SearchPage(
+                  onStockSelected: (stock) {
+                    _addToFavorites(stock);
+                  },
+                ),
                 StockCharts(),
                 Newsfeed(),
               ],
@@ -213,7 +312,9 @@ class _StockHomePageState extends State<StockHomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const SearchPage(),
+                    builder: (context) => SearchPage(
+                      onStockSelected: _addToFavorites,
+                    ),
                   ),
                 );
               },
@@ -299,7 +400,7 @@ class _StockHomePageState extends State<StockHomePage> {
                 return Card(
                   margin: const EdgeInsets.only(bottom: 12.0),
                   child: SizedBox(
-                    height: 72,
+                    height: 80,
                     child: ListTile(
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16.0,
@@ -338,41 +439,56 @@ class _StockHomePageState extends State<StockHomePage> {
                           fontSize: 13,
                         ),
                       ),
-                      trailing: Column(
+                      trailing: Row(
                         mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text(
-                            '\$${stock['price']}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 3,
-                            ),
-                            decoration: BoxDecoration(
-                              color:
-                                  (isPositiveChange ? Colors.green : Colors.red)
-                                      .withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              stock['change'],
-                              style: TextStyle(
-                                color: isPositiveChange
-                                    ? Colors.green[400]
-                                    : Colors.red[400],
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                '\$${stock['price']}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: (stock['change'].startsWith('-')
+                                          ? Colors.red
+                                          : Colors.green)
+                                      .withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  stock['change'],
+                                  style: TextStyle(
+                                    color: stock['change'].startsWith('-')
+                                        ? Colors.red[400]
+                                        : Colors.green[400],
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.close,
+                                color: Colors.grey[400], size: 20),
+                            onPressed: () {
+                              setState(() {
+                                _favorites.removeAt(index);
+                              });
+
+                              saveFavorites();
+                            },
                           ),
                         ],
                       ),
@@ -389,6 +505,7 @@ class _StockHomePageState extends State<StockHomePage> {
 
   @override
   void dispose() {
+    _priceUpdateTimer?.cancel();
     _searchController.dispose();
     super.dispose();
   }

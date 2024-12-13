@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import '../services/finnhub_service.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  final Function(Map<String, dynamic>) onStockSelected;
+
+  const SearchPage({
+    super.key,
+    required this.onStockSelected,
+  });
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -117,9 +122,12 @@ class _SearchPageState extends State<SearchPage> {
                         stock['description'],
                         style: TextStyle(color: Colors.grey[400]),
                       ),
-                      onTap: () {
-                        // finish later to add favorite stock
-                      },
+                      trailing: IconButton(
+                        icon: Icon(Icons.favorite_border, color: Colors.grey[400]),
+                        onPressed: () {
+                          widget.onStockSelected(stock);
+                        },
+                      ),
                     ),
                   );
                 },

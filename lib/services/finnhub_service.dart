@@ -5,6 +5,18 @@ class FinnhubService {
   final String apiKey = 'ctbqgg1r01qvslqv5r20ctbqgg1r01qvslqv5r2g';
   final String baseUrl = 'https://finnhub.io/api/v1';
 
+  Future<Map<String, dynamic>> getQuote(String symbol) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/quote?symbol=$symbol&token=$apiKey'),
+      headers: {'X-Finnhub-Token': apiKey},
+    );
+    
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    }
+    throw Exception('Failed to load quote');
+  }
+
   Future<List<Map<String, dynamic>>> searchStocks(String query) async {
     if (query.isEmpty) return [];
 
