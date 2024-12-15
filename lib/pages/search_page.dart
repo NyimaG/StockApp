@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/finnhub_service.dart';
+import 'stock_detail_page.dart';
 
 class SearchPage extends StatefulWidget {
   final Function(Map<String, dynamic>) onStockSelected;
@@ -128,6 +129,17 @@ class _SearchPageState extends State<SearchPage> {
                           widget.onStockSelected(stock);
                         },
                       ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => StockDetailPage(
+                              symbol: stock['symbol'],
+                              name: stock['description'],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   );
                 },

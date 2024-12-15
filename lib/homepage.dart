@@ -12,6 +12,7 @@ import 'dart:async';
 import 'services/finnhub_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'pages/stock_detail_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -396,100 +397,108 @@ class _StockHomePageState extends State<StockHomePage> {
 
                 return Card(
                   margin: const EdgeInsets.only(bottom: 12.0),
-                  child: SizedBox(
-                    height: 80,
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 8.0,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
+                    leading: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: stock['color']?.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      leading: Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: stock['color']?.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Center(
-                          child: Text(
-                            stock['symbol'][0],
-                            style: TextStyle(
-                              color: stock['color'],
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      child: Center(
+                        child: Text(
+                          stock['symbol'][0],
+                          style: TextStyle(
+                            color: stock['color'],
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                      title: Text(
-                        stock['symbol'],
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                      subtitle: Text(
-                        stock['name'],
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                          fontSize: 13,
-                        ),
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                '\$${stock['price']}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 3,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: (stock['change'].startsWith('-')
-                                          ? Colors.red
-                                          : Colors.green)
-                                      .withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  stock['change'],
-                                  style: TextStyle(
-                                    color: stock['change'].startsWith('-')
-                                        ? Colors.red[400]
-                                        : Colors.green[400],
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.close,
-                                color: Colors.grey[400], size: 20),
-                            onPressed: () {
-                              setState(() {
-                                _favorites.removeAt(index);
-                              });
-
-                              saveFavorites();
-                            },
-                          ),
-                        ],
                       ),
                     ),
+                    title: Text(
+                      stock['symbol'],
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    subtitle: Text(
+                      stock['name'],
+                      style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 13,
+                      ),
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              '\$${stock['price']}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                color: (stock['change'].startsWith('-')
+                                        ? Colors.red
+                                        : Colors.green)
+                                    .withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                stock['change'],
+                                style: TextStyle(
+                                  color: stock['change'].startsWith('-')
+                                      ? Colors.red[400]
+                                      : Colors.green[400],
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.close,
+                              color: Colors.grey[400], size: 20),
+                          onPressed: () {
+                            setState(() {
+                              _favorites.removeAt(index);
+                            });
+
+                            saveFavorites();
+                          },
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => StockDetailPage(
+                            symbol: stock['symbol'],
+                            name: stock['name'],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 );
               },
