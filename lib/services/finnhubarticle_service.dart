@@ -18,7 +18,8 @@ Future<List<Article>> fetchNews(
           jsonDecode(response.body); // Decode the response to a List
       return data.map((article) => Article.fromJson(article)).toList();
     } else {
-      throw Exception('Failed to load news: ${response.statusCode}');
+      throw Exception(
+          'Failed to load news: ${response.statusCode} Invalid input; Check format');
     }
   } catch (e) {
     throw Exception('Failed to load news: $e');
