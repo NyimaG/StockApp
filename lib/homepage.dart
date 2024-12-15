@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stockapp/login.dart';
 import 'package:stockapp/newsfeed.dart';
 //import 'package:stockapp/newsfeed.dart';
 import 'package:stockapp/stockcharts.dart';
@@ -205,8 +206,8 @@ class _StockHomePageState extends State<StockHomePage> {
                     _addToFavorites(stock);
                   },
                 ),
-                StockCharts(),
-                Newsfeed(),
+                //StockCharts(),
+                MyApp(),
               ],
             ),
           ],
@@ -228,11 +229,11 @@ class _StockHomePageState extends State<StockHomePage> {
             selectedIcon: Icon(Icons.search_sharp),
             label: 'Search',
           ),
-          NavigationDestination(
+          /*NavigationDestination(
             icon: Icon(Icons.analytics),
             selectedIcon: Icon(Icons.analytics_rounded),
             label: 'Charts',
-          ),
+          ),*/
           NavigationDestination(
             icon: Icon(Icons.newspaper),
             selectedIcon: Icon(Icons.newspaper_sharp),
@@ -277,14 +278,10 @@ class _StockHomePageState extends State<StockHomePage> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(
-              radius: 24,
-              backgroundColor: Colors.white.withOpacity(0.1),
-              child: const Icon(
-                Icons.person_outline,
-                color: Colors.white,
-                size: 28,
-              ),
+            child: ElevatedButton(
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LoginPage())),
+              child: Text("Logout"),
             ),
           ),
         ],
