@@ -30,7 +30,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
+  final firestore = FirebaseFirestore.instance;
   //final _firestore = FirebaseFirestore.instance;
   void _signOut() async {
     await _auth.signOut();
@@ -66,11 +66,17 @@ class _RegisterState extends State<Register> {
         saveUsername(user);
         //_usernameController.text;
 
-        FirebaseFirestore.instance.collection('Userinfo').add({
-          'Username': _usernameController.text,
-          'Email': _emailController.text,
-          'Password': _passwordController.text,
-        });
+        User? currentuser = FirebaseAuth.instance.currentUser;
+        if (currentuser != null) {
+          String userid = currentuser.uid;
+
+          //FirebaseFirestore.instance.collection('Userinfo').add
+          FirebaseFirestore.instance.collection('Userinfo').doc(userid).set({
+            'Username': _usernameController.text,
+            'Email': _emailController.text,
+            'Password': _passwordController.text,
+          });
+        }
         /*final newUserRef = _firestore
             .collection('Userinfo')
             .doc(); // Auto-generate a new document ID

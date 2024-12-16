@@ -37,8 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<DocumentSnapshot> getUserData() async {
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
-      String userId =
-          currentUser.uid; // Get the UID of the currently logged-in user
+      String userId = currentUser.uid; //  UID of the currently logged-in user
       // Retrieve the user's data from Firestore using their UID
       return FirebaseFirestore.instance
           .collection('Userinfo')
@@ -52,7 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("User Information")),
+      appBar: AppBar(title: Text("Settings")),
       body: FutureBuilder<DocumentSnapshot>(
         future: getUserData(), // Fetch user data
         builder: (context, snapshot) {
