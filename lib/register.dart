@@ -65,14 +65,20 @@ class _RegisterState extends State<Register> {
         String user = _usernameController.text;
         saveUsername(user);
         //_usernameController.text;
-        final newUserRef = _firestore
-            .collection('Userinfo')
-            .doc(); // Auto-generate a new document ID
-        newUserRef.set({
+
+        FirebaseFirestore.instance.collection('Userinfo').add({
           'Username': _usernameController.text,
           'Email': _emailController.text,
           'Password': _passwordController.text,
         });
+        /*final newUserRef = _firestore
+            .collection('Userinfo')
+            .doc(); // Auto-generate a new document ID
+        newUserRef.add({
+          'Username': _usernameController.text,
+          'Email': _emailController.text,
+          'Password': _passwordController.text,
+        });*/
         // Navigate to home screen or show success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Registration successful!')),
