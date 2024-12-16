@@ -1,16 +1,6 @@
 # stockapp
 
-A new Flutter project.
+To use our flutter app, you can use an android emulator device from android studio. Once the app launches, register for an account and then login in with the same credentials. Once you are in the app,
+you can search for a stock using the search bar and click to view the stock data/price chart or click the heart icon to add it to your homepage. For the newsfeed, enter a valid stock symbol and date range following the suggested format. You can click on the article to take you to the original website. On the settings page, you can edit your username by clicking the change button and save to update the username. You can head back to the homepage and click the logout button to logout.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Youtube presentation link: https://youtu.be/hA2Gocx1c9k
