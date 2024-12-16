@@ -56,8 +56,12 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         );*/
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => MyApp()));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MyApp(),
+          ),
+        );
       } catch (e) {
         // Show error message
         ScaffoldMessenger.of(context).showSnackBar(
@@ -74,6 +78,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF1A1A1A),
       body: Stack(
         children: [
           // Background Gradient
@@ -100,43 +105,43 @@ class _LoginPageState extends State<LoginPage> {
                   Text(
                     "Welcome to StockSavvy",
                     style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold),
+                      color: Colors.black,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  SizedBox(
-                    height: 35,
-                  ),
+                  SizedBox(height: 35),
                   Image.asset(
                     'assets/stockpic.png',
                     width: 100,
                     height: 100,
                     fit: BoxFit.cover,
                   ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 25),
                   TextFormField(
                     style: TextStyle(
                       color: Colors.black,
                     ),
                     controller: _emailController,
                     decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                            borderRadius: BorderRadius.circular(5.5)),
-                        prefixIcon: Icon(Icons.person, color: Colors.black),
-                        hintText: "Enter a valid email",
-                        hintStyle: TextStyle(color: Colors.black),
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: 'Email'),
-                    keyboardType: TextInputType.emailAddress,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                        borderRadius: BorderRadius.circular(5.5),
+                      ),
+                      prefixIcon: Icon(Icons.person, color: Colors.black),
+                      hintText: "Enter a valid email",
+                      hintStyle: TextStyle(color: Colors.black54),
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Email',
+                      labelStyle: TextStyle(color: Colors.black54),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                        borderRadius: BorderRadius.circular(5.5),
+                      ),
+                    ),
                     validator: (value) {
-                      if (value == null ||
-                          value.isEmpty ||
-                          !value.contains('@')) {
+                      if (value == null || value.isEmpty || !value.contains('@')) {
                         return 'Please enter a valid email';
                       }
                       return null;
@@ -149,15 +154,22 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     controller: _passwordController,
                     decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                            borderRadius: BorderRadius.circular(5.5)),
-                        prefixIcon: Icon(Icons.lock, color: Colors.black),
-                        hintText: "Enter a valid password",
-                        hintStyle: TextStyle(color: Colors.black),
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: 'Password'),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                        borderRadius: BorderRadius.circular(5.5),
+                      ),
+                      prefixIcon: Icon(Icons.lock, color: Colors.black),
+                      hintText: "Enter a valid password",
+                      hintStyle: TextStyle(color: Colors.black54),
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Password',
+                      labelStyle: TextStyle(color: Colors.black54),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                        borderRadius: BorderRadius.circular(5.5),
+                      ),
+                    ),
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty || value.length < 6) {
@@ -168,20 +180,23 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: 20),
                   _isLoading
-                      ? Center(child: CircularProgressIndicator())
+                      ? CircularProgressIndicator()
                       : ElevatedButton(
                           onPressed: _loginUser,
-                          child: Text('Login',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 25,
-                                  fontStyle: FontStyle.normal)),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
-                            shape: ContinuousRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            shadowColor: Colors.white,
+                            padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(
+                            'Login',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                              fontStyle: FontStyle.normal,
+                            ),
                           ),
                         ),
                   SizedBox(height: 15),
@@ -192,10 +207,11 @@ class _LoginPageState extends State<LoginPage> {
                         MaterialPageRoute(builder: (context) => Register()),
                       );
                     },
-                    child: Text(
-                      'Don’t have an account? Register here.',
+                    child: const Text(
+                      'Don\'t have an account? Register here.',
                       style: TextStyle(
                         color: Colors.black,
+                        fontSize: 16,
                       ),
                     ),
                   ),

@@ -22,11 +22,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Stock App',
-      theme: ThemeData(
+      theme: ThemeData.dark().copyWith(
         colorScheme: ColorScheme.dark(
           primary: Colors.blue[400]!,
           secondary: Colors.blue[300]!,
           surface: const Color(0xFF252525),
+          background: const Color(0xFF1A1A1A),
           surfaceContainerHighest: const Color(0xFF252525),
         ),
         scaffoldBackgroundColor: const Color(0xFF1A1A1A),
@@ -36,6 +37,14 @@ class MyApp extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
+        ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: const Color(0xFF252525),
+          elevation: 0,
+        ),
+        navigationBarTheme: NavigationBarThemeData(
+          backgroundColor: const Color(0xFF252525),
+          indicatorColor: Colors.blue[400]!.withOpacity(0.3),
         ),
         useMaterial3: true,
       ),
@@ -208,8 +217,8 @@ class _StockHomePageState extends State<StockHomePage> {
                     _addToFavorites(stock);
                   },
                 ),
-                MyApp(),
-                SettingsUser(),
+                const Newsfeed(),
+                const SettingsUser(),
               ],
             ),
           ],
