@@ -3,27 +3,6 @@ import 'articleclass.dart';
 import '../services/finnhubarticle_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.dark(
-          primary: Colors.blue[400]!,
-          secondary: Colors.blue[300]!,
-          surface: const Color(0xFF252525),
-          surfaceContainerHighest: const Color(0xFF252525),
-        ),
-        scaffoldBackgroundColor: const Color(0xFF1A1A1A),
-        useMaterial3: true,
-      ),
-      home: const Newsfeed(),
-    );
-  }
-}
-
 class Newsfeed extends StatefulWidget {
   const Newsfeed({super.key});
 
