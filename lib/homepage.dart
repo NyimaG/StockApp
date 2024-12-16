@@ -174,11 +174,16 @@ class _StockHomePageState extends State<StockHomePage> {
   Future<void> saveFavorites() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+      await FirebaseFirestore.instance
+          .collection('Userinfo')
+          .doc(user.uid)
+          .update({
         'favorites': _favorites
             .map((f) => {
                   'symbol': f['symbol'],
                   'name': f['name'],
+                  'price': f['price'],
+                  'change': f['change'],
                   'color': f['color'].value,
                 })
             .toList(),
@@ -190,7 +195,7 @@ class _StockHomePageState extends State<StockHomePage> {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       final doc = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('Userinfo')
           .doc(user.uid)
           .get();
 
