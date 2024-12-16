@@ -139,15 +139,19 @@ class _RegisterState extends State<Register> {
                   TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                            borderRadius: BorderRadius.circular(5.5)),
-                        prefixIcon: Icon(Icons.person, color: Colors.black),
-                        hintText: "Enter a valid email",
-                        hintStyle: TextStyle(color: Colors.black),
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: 'Email'),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                        borderRadius: BorderRadius.circular(5.5),
+                      ),
+                      prefixIcon: Icon(Icons.person, color: Colors.black),
+                      hintText: "Enter a valid email",
+                      hintStyle: TextStyle(color: Colors.grey[600]),
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Email',
+                      labelStyle: TextStyle(color: Colors.black),
+                    ),
+                    style: TextStyle(color: Colors.black),
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value == null ||
@@ -162,15 +166,19 @@ class _RegisterState extends State<Register> {
                   TextFormField(
                     controller: _usernameController,
                     decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                            borderRadius: BorderRadius.circular(5.5)),
-                        prefixIcon: Icon(Icons.person_2, color: Colors.black),
-                        hintText: "Create Username",
-                        hintStyle: TextStyle(color: Colors.black),
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: 'Username'),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                        borderRadius: BorderRadius.circular(5.5),
+                      ),
+                      prefixIcon: Icon(Icons.person_2, color: Colors.black),
+                      hintText: "Create Username",
+                      hintStyle: TextStyle(color: Colors.grey[600]),
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Username',
+                      labelStyle: TextStyle(color: Colors.black),
+                    ),
+                    style: TextStyle(color: Colors.black),
                     keyboardType: TextInputType.name,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -183,15 +191,19 @@ class _RegisterState extends State<Register> {
                   TextFormField(
                     controller: _passwordController,
                     decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                            borderRadius: BorderRadius.circular(5.5)),
-                        prefixIcon: Icon(Icons.lock, color: Colors.black),
-                        hintText: "Enter a valid password",
-                        hintStyle: TextStyle(color: Colors.black),
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: 'Password'),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                        borderRadius: BorderRadius.circular(5.5),
+                      ),
+                      prefixIcon: Icon(Icons.lock, color: Colors.black),
+                      hintText: "Enter a valid password",
+                      hintStyle: TextStyle(color: Colors.grey[600]),
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Password',
+                      labelStyle: TextStyle(color: Colors.black),
+                    ),
+                    style: TextStyle(color: Colors.black),
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty || value.length < 6) {
