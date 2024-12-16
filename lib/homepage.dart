@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:stockapp/login.dart';
 import 'package:stockapp/newsfeed.dart';
 //import 'package:stockapp/newsfeed.dart';
-import 'package:stockapp/stockcharts.dart';
 //import 'package:stockapp/stockcharts.dart';
 //import 'package:stockapp/stocksearch.dart';
 import 'pages/search_page.dart';
