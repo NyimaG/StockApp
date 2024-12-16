@@ -87,10 +87,20 @@ class _StockHomePageState extends State<StockHomePage> {
   }
 
   Future<void> _loadUsername() async {
-    String? savedUsername = await getUsername();
-    setState(() {
-      username = savedUsername;
-    });
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('Userinfo')
+          .doc(currentUser.uid)
+          .get();
+      
+      if (userDoc.exists) {
+        Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+        setState(() {
+          username = userData['Username'];
+        });
+      }
+    }
   }
 
   void _addToFavorites(Map<String, dynamic> stock) async {
