@@ -88,17 +88,102 @@ class _StockDetailPageState extends State<StockDetailPage> {
   }
 
   Widget _buildPriceChart() {
+    double lowestPrice = _quoteData!['l'];
+    double highestPrice = _quoteData!['h'];
+    double priceRange = highestPrice - lowestPrice;
+    
+    double minY = lowestPrice - (priceRange * 0.2);
+    double maxY = highestPrice + (priceRange * 0.2);
+    
+    double interval = (maxY - minY) / 5;  
+
     return Container(
-      height: 200,
+      height: 350,
+      padding: EdgeInsets.fromLTRB(16, 16, 16, 32),
       child: LineChart(
         LineChartData(
-          gridData: FlGridData(show: true),
-          titlesData: FlTitlesData(show: false),
-          borderData: FlBorderData(show: true),
+          gridData: FlGridData(
+            show: true,
+            drawVerticalLine: true,
+            horizontalInterval: interval,
+            verticalInterval: 1,
+            getDrawingHorizontalLine: (value) {
+              return FlLine(
+                color: Colors.grey.withOpacity(0.2),
+                strokeWidth: 1,
+              );
+            },
+          ),
+          titlesData: FlTitlesData(
+            show: true,
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                interval: interval,
+                reservedSize: 65,
+                getTitlesWidget: (value, meta) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Text(
+                      '\$${value.toStringAsFixed(2)}',
+                      style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 12,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                interval: 1,
+                reservedSize: 40, 
+                getTitlesWidget: (value, meta) {
+                  String text = '';
+                  switch (value.toInt()) {
+                    case 0:
+                      text = 'Prev';
+                      break;
+                    case 1:
+                      text = 'Open';
+                      break;
+                    case 2:
+                      text = 'Low';
+                      break;
+                    case 3:
+                      text = 'High';
+                      break;
+                    case 4:
+                      text = 'Current';
+                      break;
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 12,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            rightTitles: AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            topTitles: AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+          ),
+          borderData: FlBorderData(show: false),
           minX: 0,
-          maxX: 5,
-          minY: _quoteData!['l'] * 0.95,
-          maxY: _quoteData!['h'] * 1.05,
+          maxX: 4,
+          minY: minY,
+          maxY: maxY,
           lineBarsData: [
             LineChartBarData(
               spots: [
@@ -110,8 +195,22 @@ class _StockDetailPageState extends State<StockDetailPage> {
               ],
               isCurved: true,
               color: _quoteData!['d'] >= 0 ? Colors.green : Colors.red,
-              barWidth: 2,
-              dotData: FlDotData(show: true),
+              barWidth: 2.5,
+              dotData: FlDotData(
+                show: true,
+                getDotPainter: (spot, percent, barData, index) {
+                  return FlDotCirclePainter(
+                    radius: 6,
+                    color: barData.color ?? Colors.blue,
+                    strokeWidth: 2,
+                    strokeColor: Colors.white,
+                  );
+                },
+              ),
+              belowBarData: BarAreaData(
+                show: true,
+                color: (_quoteData!['d'] >= 0 ? Colors.green : Colors.red).withOpacity(0.1),
+              ),
             ),
           ],
         ),
