@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,6 +30,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
   //final _firestore = FirebaseFirestore.instance;
   void _signOut() async {
     await _auth.signOut();
@@ -64,7 +65,14 @@ class _RegisterState extends State<Register> {
         String user = _usernameController.text;
         saveUsername(user);
         //_usernameController.text;
-
+        final newUserRef = _firestore
+            .collection('Userinfo')
+            .doc(); // Auto-generate a new document ID
+        newUserRef.set({
+          'Username': _usernameController.text,
+          'Email': _emailController.text,
+          'Password': _passwordController.text,
+        });
         // Navigate to home screen or show success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Registration successful!')),

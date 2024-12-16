@@ -13,6 +13,7 @@ import 'services/finnhub_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'pages/stock_detail_page.dart';
+import 'settings.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -207,8 +208,8 @@ class _StockHomePageState extends State<StockHomePage> {
                     _addToFavorites(stock);
                   },
                 ),
-                //StockCharts(),
                 MyApp(),
+                SettingsUser(),
               ],
             ),
           ],
@@ -230,15 +231,15 @@ class _StockHomePageState extends State<StockHomePage> {
             selectedIcon: Icon(Icons.search_sharp),
             label: 'Search',
           ),
-          /*NavigationDestination(
-            icon: Icon(Icons.analytics),
-            selectedIcon: Icon(Icons.analytics_rounded),
-            label: 'Charts',
-          ),*/
           NavigationDestination(
             icon: Icon(Icons.newspaper),
             selectedIcon: Icon(Icons.newspaper_sharp),
             label: 'News',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.settings),
+            selectedIcon: Icon(Icons.settings_sharp),
+            label: 'Settings',
           ),
         ],
       ),
