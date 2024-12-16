@@ -58,10 +58,10 @@ class _SettingsPageState extends State<SettingsPage> {
               children: users.map((doc) {
                 final userData = doc.data() as Map<String, dynamic>;
                 return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Colors.black,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(

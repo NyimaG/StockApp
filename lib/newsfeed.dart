@@ -190,6 +190,12 @@ class ArticleListPage extends StatelessWidget {
       body: ListView.builder(
         itemCount: articles.length,
         itemBuilder: (context, index) {
+          if (articles.isEmpty) {
+            Center(
+              child: Text('No news available.',
+                  style: TextStyle(fontSize: 16, color: Colors.grey)),
+            );
+          }
           return Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
